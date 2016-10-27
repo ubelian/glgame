@@ -19,12 +19,13 @@ public:
 	/*****************************/
 
 	/*Устанавливают текущее положение*/
+	void operator=(int a);
 	void setCPx(int x);
 	void setCPy(int y);
 	void setCP(CurrentPosition CP);
 	/*********************************/
 
-	bool operator==(CurrentPosition CP_);
+	bool operator==(CurrentPosition &CP_) const;
 
 };
 

@@ -4,6 +4,16 @@
 #include "Snake.h"
 #include "Food.h"
 
+//<<<<<<VARIABLES>>>>>>
+static int xMove = 0;
+static int yMove = 0;
+static int windowHeight = 480;
+static int windowWidth = 640;
+bool gameIsEnded = false;
+
+extern Food food;
+extern Snake snake;
+
 //<<<<<<<<<<<PROTOTIPES>>>>>>>>>>>>
 
 void init();
@@ -12,15 +22,7 @@ void gameKeyboard(unsigned char key, int x, int y);
 void gameReshape(int w, int h);
 void gameTimer(int value);
 void grid();
-
-//<<<<<<VARIABLES>>>>>>
-static int xMove = 0;
-static int yMove = 0;
-static int windowHeight = 480;
-static int windowWidth = 640;
-Snake snake;
-Food food;
-
+void endGame();
 
 
 int main(int argc, char** argv) {
@@ -35,7 +37,6 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(gameScene);
 	glutKeyboardFunc(gameKeyboard);
 	glutReshapeFunc(gameReshape);
-	std::cout << RAND_MAX;
 	glutMainLoop();
 	return 0;
 
@@ -58,14 +59,27 @@ void gameScene() {
 
 void gameTimer(int value){
 	
-	snake.snakeMoving();
+	/*Функция отрисовывает змею*/
+	if (!snake.snakeMoving())
+		endGame();
 
-	glutTimerFunc(120,gameTimer, 0);
+	/*Проверка на съедение точки. Точка считается съеденой тогда, 
+	когда координаты головы и точки совпадают*/
+	if (snake.getHeadCP() == food.getCP() ) {
+		food.isEated();
+		snake.addSnakeSize();
+	}
+
+	if(!gameIsEnded)
+		glutTimerFunc(120,gameTimer, 0);
 }
 
 
 
 void gameKeyboard(unsigned char key, int x, int y) {
+
+	using std::cout;
+	using std::endl;
 
 	switch (key) {
 
@@ -84,7 +98,6 @@ void gameKeyboard(unsigned char key, int x, int y) {
 	case 'w': //UP
 
 		snake.direction(1);
-		food.printCoords();
 		
 		break;
 
@@ -95,6 +108,11 @@ void gameKeyboard(unsigned char key, int x, int y) {
 		break;
 
 	case 'p':
+
+		std::cout << "first tail x " << snake.getTailCP(1).getCPx() << " first tail y " << snake.getTailCP(1).getCPy() << endl;
+		//std::cout << "first tail x " << snakePosition[2].getCPx() << "first tail y " << snakePosition[2].getCPy() << endl;
+			
+		break;
 		
 	default:
 		break;
@@ -146,4 +164,14 @@ void grid() {
 	glEnd();
 
 
+}
+
+void endGame() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(1,0,0,0);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glRecti(40, 40, 600, 440);
+	glFlush();
+	gameIsEnded = true;
 }

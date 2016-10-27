@@ -8,6 +8,7 @@ class Food {
 private:
 
 	CurrentPosition foodPosition;
+	bool foodIsEated = true;
 
 public:
 	Food();
@@ -15,8 +16,11 @@ public:
 	void birth();
 	void printCoords();
 	bool isEated();
+	CurrentPosition getCP();
 
 };
+
+
 
 #endif // !FOOD_H_
 

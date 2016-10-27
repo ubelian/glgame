@@ -34,18 +34,31 @@ CurrentPosition CurrentPosition::getCP() const {
 	return CP;
 }
 
+void CurrentPosition :: operator=(int a) {
+
+
+
+
+}
+
 void CurrentPosition::setCPx(int x) {
 	xPosition = x;
 }
+
 void CurrentPosition::setCPy(int y) {
 	yPosition = y;
 }
+
 void CurrentPosition::setCP(CurrentPosition CP) {
 	xPosition = CP.xPosition;
 	yPosition = CP.yPosition;
 }
 
-bool CurrentPosition::operator==(CurrentPosition CP_) {
-	return true;
+bool CurrentPosition::operator==(CurrentPosition &CP_) const {
+
+	if(xPosition == CP_.xPosition && yPosition == CP_.yPosition)
+		return true;
+	return false;
+
 }
 
