@@ -1,12 +1,12 @@
 #ifndef SNAKE_H_
 #define SNAKE_H_
-#include "tools.h"
 
 #define UP 1
 #define DOWN 2
 #define LEFT 3
 #define RIGHT 4
 
+#include "tools.h"
 
 class Snake {
 
@@ -18,8 +18,11 @@ private:
 	/*Текущее направление движения*/
 	int moveDirection = RIGHT;
 
+	/*Флаг показывает может ли змея повернуть куда-то. По умолчанию true (может)*/
+	bool canChange = true;
+
 	/*Размер прямоуголька, который отображает голову и части змеи*/
-	const int rectSize = 40;
+	int rectSize = 40;
 
 	/*Текущие координаты тела змеи*/
 	CurrentPosition *snakePosition;
@@ -32,6 +35,8 @@ public:
 	Snake();
 	/*Конструктор создаст змею длиной snakeSize_*/
 	Snake(int snakeSize_);
+	/*Конструктор копирования*/
+	Snake(const Snake &s);
 	/*Деструктор освободит память для змеи и для сохранённых предыдущих координат*/
 	~Snake();
 	/*Функци содержит координаты головы*/
@@ -50,9 +55,14 @@ public:
 	void addSnakeSize();
 	/*Вернет текущий размер змеи*/
 	int getSnakeSize() const;
-	
+	/*Вернет canChange. То есть покажет может ли в какой-то момент времени змея повернуть*/
+	bool getCanChange();
+	/*Установит canChange*/
+	void setCanChange(bool a);
 
 };
+
+extern Snake snake;
 
 
 

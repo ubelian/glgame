@@ -1,13 +1,24 @@
-#include "Food.h"
 #include <GL\glut.h>
 #include <GL\GL.h>
 #include <cmath>
 #include <ctime>
 #include <iostream>
 
+
+//>>>>>>>>>>>>>>>>>
+#include "Food.h"
+#include "tools.h"
+#include "Snake.h"
+#include <iostream>
+//<<<<<<<<<<<<<<<<<
+
+extern Snake snake;
+
 Food::Food(){
 
-	bool a = false;
+	std :: cout <<  snake.getCanChange();
+
+	
 
 	srand(time(0));
 
@@ -18,8 +29,6 @@ Food::Food(){
 	x = (x % 640) - (x % 640) % 40;
 
 	y = (y % 480) - (y % 480) % 40;
-
-	
 
 	foodPosition.setCPx(x);
 	foodPosition.setCPy(y);
@@ -38,6 +47,8 @@ void Food::printCoords() {
 
 void Food::birth() {
 	 {
+
+		snake.getHeadCP();
 
 		glColor3f(1, 1, 0);
 		glPushMatrix();

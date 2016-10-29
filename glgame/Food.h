@@ -1,7 +1,13 @@
 #ifndef FOOD_H_
 #define FOOD_H_
-#include "tools.h"
 #include <cstdlib>
+
+//>>>>>>>>>>>>>>>>>
+#include "Food.h"
+#include "tools.h"
+#include "Snake.h"
+//<<<<<<<<<<<<<<<<<
+
 
 class Food {
 
@@ -17,10 +23,11 @@ public:
 	void printCoords();
 	bool isEated();
 	CurrentPosition getCP();
+	
 
 };
 
-
+extern Food food;
 
 #endif // !FOOD_H_
 

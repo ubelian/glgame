@@ -1,10 +1,17 @@
-#include "Snake.h"
 #include <GL\glut.h>
 #include <GL\GL.h>
 #include <iostream>
 
+//>>>>>>>>>>>>>>>>>
+#include "Snake.h"
+#include "tools.h"
+#include "Food.h"
+//<<<<<<<<<<<<<<<<<
+
 
 Snake::Snake(){
+
+	/*По умолчанию змея имеет размер равным 3. Создаётся 3 массива соответствующего размера и заполняем их константами.*/
 	snakePosition = new CurrentPosition[3];
 	snakePosition[0].setCP(CurrentPosition(200, 0));
 	snakePosition[1].setCP(CurrentPosition(160, 0));
@@ -17,6 +24,7 @@ Snake::Snake(){
 }
 
 Snake::Snake(int snakeSize_) : snakeSize(snakeSize_){
+
 	int a = 200;
 
 	snakePosition = new CurrentPosition[snakeSize];
@@ -42,7 +50,7 @@ Snake::~Snake(){
 }
 
 void Snake :: snakeDisplay() {
-
+	/*Функция отображения змеи. СОдержит смену буферов кадра и вызов перерисовки*/
 	glColor3f(0.5f, 0.2f, 0.4f);
 
 	for (int i = 0; i < snakeSize; i++) {
@@ -56,10 +64,9 @@ void Snake :: snakeDisplay() {
 }
 
 
-
 bool Snake::snakeMoving() {
 
-	int step1 = 40;
+	int step = 40;
 
 	for (int i = 0; i < snakeSize; i++) {
 
@@ -68,23 +75,24 @@ bool Snake::snakeMoving() {
 	}
 
 	switch (moveDirection) {
+
 	case 1: //UP
-		snakePosition[0].setCPy(snakePosition[0].getCPy() + step1);
+		snakePosition[0].setCPy(snakePosition[0].getCPy() + step);
 		break;
 
 	case 2: //DOWN
-		snakePosition[0].setCPy(snakePosition[0].getCPy() - step1);
+		snakePosition[0].setCPy(snakePosition[0].getCPy() - step);
 		break;
 
 	case 3: //LEFT
-		snakePosition[0].setCPx(snakePosition[0].getCPx() - step1);
+		snakePosition[0].setCPx(snakePosition[0].getCPx() - step);
 		break;
 
 	case 4: //RIGHT
-		snakePosition[0].setCPx(snakePosition[0].getCPx() + step1);
+		snakePosition[0].setCPx(snakePosition[0].getCPx() + step);
 		break;
 
-	default:
+	default: //Если направление движения не UP DOWN RIGHT LEFT.
 
 		std::cout << "Направление движения не двумерно";
 		return false;
@@ -92,18 +100,19 @@ bool Snake::snakeMoving() {
 
 	}
 
+
+	/*Проверка того съела ли змея саму себя*/
 	for (int i = 1; i < snakeSize; i++) {
 
 		if (snakePosition[0] == snakePosition[i]) {
 			return false;
 		}
 			
-
 	}
 
-
-
-
+	/*Проверка того зашла ли змея за пределы окна*/
+	if (snakePosition[0].getCPx() >= 640 || snakePosition[0].getCPx() < 0 || snakePosition[0].getCPy() >= 480 || snakePosition[0].getCPy() < 0)
+		return false;
 
 	for (int i = 1; i != snakeSize; i++) {
 
@@ -111,15 +120,18 @@ bool Snake::snakeMoving() {
 
 	}
 
+	canChange = true;
+
 	return true;
 
 }
 
 bool Snake :: direction(int mMove) {
 
-	if (moveDirection + mMove == 3 || moveDirection + mMove == 7)
+	if ((moveDirection + mMove == 3 || moveDirection + mMove == 7) && canChange)
 		return false;
 
+	canChange = false;
 	moveDirection = mMove;
 
 	return true;
@@ -140,7 +152,7 @@ int Snake :: getMD() {
 
 CurrentPosition Snake :: getTailCP(int a) {
 
-	if (a > snakeSize && a < 0)
+	if (a >= snakeSize || a <= 0)
 		return snakePosition[0].getCP();
 	return snakePosition[a].getCP();
 
@@ -183,6 +195,36 @@ void Snake::addSnakeSize() {
 	snakeSize++;
 
 	delete[] arrBuff;
+
+}
+
+bool Snake :: getCanChange() {
+
+	return canChange;
+
+}
+
+void Snake :: setCanChange(bool a) {
+
+	canChange = a;
+
+}
+
+Snake::Snake(const Snake &s) {
+
+	snakeSize = s.snakeSize;
+	rectSize = s.rectSize;
+	
+	moveDirection = s.moveDirection;
+	canChange = s.canChange;
+
+	snakePosition = new CurrentPosition[snakeSize];
+	snakePosition2 = new CurrentPosition[snakeSize];
+
+	for (int i = 0; i < snakeSize; i++) {
+		snakePosition[i].setCP(s.snakePosition[i].getCP());
+		snakePosition2[i].setCP(s.snakePosition2[i].getCP());
+	}
 
 }
 

@@ -1,8 +1,10 @@
 #include <GL\glut.h>
 #include <GL\GL.h>
 #include <iostream>
-#include "Snake.h"
+#include "tools.h"
+
 #include "Food.h"
+#include "Snake.h"
 
 //<<<<<<VARIABLES>>>>>>
 static int xMove = 0;
@@ -10,9 +12,6 @@ static int yMove = 0;
 static int windowHeight = 480;
 static int windowWidth = 640;
 bool gameIsEnded = false;
-
-extern Food food;
-extern Snake snake;
 
 //<<<<<<<<<<<PROTOTIPES>>>>>>>>>>>>
 
@@ -31,7 +30,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(640, 480);
 	glutInitWindowPosition(100, 100);
-	glutCreateWindow("hello");
+	glutCreateWindow("Змейка");
 	init();
 	glutTimerFunc(600, gameTimer, 0);
 	glutDisplayFunc(gameScene);
@@ -55,13 +54,15 @@ void gameScene() {
 }
 
 
-
-
 void gameTimer(int value){
 	
 	/*Функция отрисовывает змею*/
+	/*Функция вернет false если змея съела саму себя или если она вышла за пределы экрана*/
+	/*Вызовется функция endgame() которая ознаменовывает конец игры*/
 	if (!snake.snakeMoving())
 		endGame();
+
+	
 
 	/*Проверка на съедение точки. Точка считается съеденой тогда, 
 	когда координаты головы и точки совпадают*/
@@ -70,8 +71,10 @@ void gameTimer(int value){
 		snake.addSnakeSize();
 	}
 
+	/*Глобальная переменная gameIsEnded установится в true если вызовется функция endGame() */
 	if(!gameIsEnded)
 		glutTimerFunc(120,gameTimer, 0);
+
 }
 
 
@@ -85,32 +88,37 @@ void gameKeyboard(unsigned char key, int x, int y) {
 
 	case 'd': //RIGHT
 	
+		if (snake.getCanChange())
 		snake.direction(4);
+		
 
 		break;
 
 	case 'a': //LEFT
-	
+		
+		if (snake.getCanChange())
 		snake.direction(3);
+		
 
 		break;
 		 
 	case 'w': //UP
 
+		if (snake.getCanChange())
 		snake.direction(1);
 		
 		break;
 
 	case 's': //DOWN
 
+		if (snake.getCanChange())
 		snake.direction(2);
-		
+	
 		break;
 
 	case 'p':
 
-		std::cout << "first tail x " << snake.getTailCP(1).getCPx() << " first tail y " << snake.getTailCP(1).getCPy() << endl;
-		//std::cout << "first tail x " << snakePosition[2].getCPx() << "first tail y " << snakePosition[2].getCPy() << endl;
+		
 			
 		break;
 		
