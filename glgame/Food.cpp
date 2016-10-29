@@ -16,9 +16,7 @@ extern Snake snake;
 
 Food::Food(){
 
-	std :: cout <<  snake.getCanChange();
-
-	
+	//snake.getHeadCP();
 
 	srand(time(0));
 
